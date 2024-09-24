@@ -1,0 +1,77 @@
+{
+    "code": "claimblock",
+    "variantgroups": [
+        {
+            "code": "type",
+            "states": [ "homestead", "hamlet", "town", "fort", "city" ]
+        }
+    ],
+    "behaviors": [
+        {
+            "name": "Claimblock",
+            "propertiesByType": {
+                "claimblock-homestead": {
+                    "expectancyBonus": 2.0
+                },
+                "claimblock-hamlet": {
+                    "expectancyBonus": 1.5
+                },
+                "claimblock-town": {
+                    "expectancyBonus": 1
+                },
+                "claimblock-fort": {
+                    "expectancyBonus": 0.5
+                },
+                "claimblock-city": {
+                    "expectancyBonus": 0
+                }
+            }
+        },
+        { "name": "Unstable" }
+    ],
+    "entityBehaviors": [
+        {
+            "name": "ClaimblockEntity",
+            "properties": {
+                "protectionRadiusByType": {
+                    "claimblock-homestead": 16,
+                    "claimblock-hamlet": 32,
+                    "claimblock-town": 48,
+                    "claimblock-fort": 64,
+                    "claimblock-city": 96
+                },
+                "captureRadiusByType": {
+                    "claimblock-homestead": 4,
+                    "claimblock-hamlet": 8,
+                    "claimblock-town": 12,
+                    "claimblock-fort": 16,
+                    "claimblock-city": 20
+                },
+                "captureDurationByType": {
+                    "claimblock-homestead": 4,
+                    "claimblock-hamlet": 8,
+                    "claimblock-town": 12,
+                    "claimblock-fort": 16,
+                    "claimblock-city": 20
+                }
+            }
+        }
+    ],
+
+    "creativeinventory": {
+        "general": [ "*" ],
+        "ClaimsofCandor": [ "*" ]
+    },
+    "lightAbsorption": 0,
+    "lightHsv": [ 7, 3, 18 ],
+    "shape": {
+        "base": "claimsofcandor:shapes/block/claimblock"
+    },
+    "resistance": 3.5,
+    "sounds": {
+        "place": "game:block/anvil",
+        "walk": "game:walk/stone"
+    }
+
+
+}

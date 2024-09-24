@@ -1,0 +1,110 @@
+{
+    "game:tabname-ClaimsofCandor": "ClaimsofCandor",
+
+    "Under {0}'s command for {1:0.#} days": "Under {0}'s command for {1:0.#} days",
+    "Under {0}'s command in the name of {1} for {2:0.#} days": "Under {0}'s command in the name of {1} for {2:0.#} days",
+
+    "{0} is currently being besieged by a small band": "{0} is currently being besieged by a small band",
+    "{0} is currently being besieged by a large band": "{0} is currently being besieged by a large band",
+    "{0} is under attack!": "{0} is under attack!",
+    "One of your claim is under attack!": "One of your claims is under attack!",
+    "{0} has been captured!": "{0} has been captured!",
+    "One of your claim has been captured!": "One of your claim has been captured!",
+    "{0} has run out of food!": "{0} has run out of food!",
+    "One of your claim has run out of food!": "One of your claim has run out of food!",
+    "{0} has been destroyed!": "{0} has been destroyed!",
+    "One of your claim has been destroyed!": "One of your claim has been destroyed!",
+    "{0} captured {1}": "{0} captured {1}",
+    "{0} no longer leagues with {1}": "{0} no longer leagues with {1}",
+    "{0} now leagues with {1}": "{0} now leagues with {1}",
+
+    "+{0} stronghold expectancy": "+{0} stronghold expectancy",
+
+    "You're not in a stronghold you claimed": "You're not in a stronghold you claimed",
+    "You can use /stronghold name to name your claim": "You can use <i>/stronghold name</i> to name your claim",
+
+    "Banner of {0}": "Banner of {0}",
+    "Ruins of {0}": "Ruins of {0}",
+
+    "ClaimsofCandor:stronghold-noaccess": "You can't do that here!",
+
+    "ClaimsofCandor:stronghold-name-success": "This stronghold is now dubbed {0}",
+    "ClaimsofCandor:stronghold-name-fail": "You can't name this stronghold",
+    "ClaimsofCandor:stronghold-name-null": "You aren't in a stronghold to name'!'",
+
+
+    "ClaimsofCandor:stronghold-groupstartcapture": "We have began to capture {0}!",
+    "ClaimsofCandor:stronghold-startcapture": "You start to capture {0}!",
+    "ClaimsofCandor:stronghold-switchcapture": "{0} is now gaining control over {1}!",
+
+    "ClaimsofCandor:stronghold-grouplosingclaim": "Our claim on {0} is under attack!",
+    "ClaimsofCandor:stronghold-groupreclaim": "We have regained hold of {0}!",
+    "ClaimsofCandor:stronghold-reclaim": "You we have regained hold of {0}!",
+
+    
+    "ClaimsofCandor:stronghold-takeover-attacker-taking": "We've our enemies remain in {0} of {1}!",
+    "ClaimsofCandor:stronghold-takeover-attacker-losing": "Our enemies have retaken {0} of {1}!",
+    "ClaimsofCandor:stronghold-takeover-defender-losing": "We've been pushed out of {0} of {1}!",
+    "ClaimsofCandor:stronghold-takeover-defender-taking": "We've regained {0} of {1}!",
+
+    "ClaimsofCandor:stronghold-capture-attacker-taking": "We've removed our enemies from {0} of {1}!",
+    "ClaimsofCandor:stronghold-capture-attacker-losing": "Our enemies have retaken {0} of {1}!",
+    "ClaimsofCandor:stronghold-capture-defender-losing": "We've been pushed out of {0} of {1}!",
+    "ClaimsofCandor:stronghold-capture-defender-taking": "We've taken hold of {0} of {1}!",
+
+    "ClaimsofCandor:capturegroup-notingroup": "You're not in the Group {0} and it cannot be your capture group!",
+    "ClaimsofCandor:capturegroup-nosuchgroup": "That group doesn't exist!",
+    "ClaimsofCandor:capturegroup-setsuccess": "Sucessfully set capture group to {0}",
+    "ClaimsofCandor:capturegroup-current": "Your current capture group is {0}",
+    "ClaimsofCandor:capturegroup-nosetgroup": "You don't have a set capture group.",
+
+
+
+
+
+    "ClaimsofCandor:block-claimblock-homestead": "Homestead Claimblock",
+    "ClaimsofCandor:block-claimblock-hamlet": "Hamlet Claimblock",
+    "ClaimsofCandor:block-claimblock-town": "Town Claimblock",
+    "ClaimsofCandor:block-claimblock-fort": "Fort Claimblock",
+    "ClaimsofCandor:block-claimblock-city": "City Claimblock",
+
+    "ClaimsofCandor:block-gabion-aged-*": "Gabion (Aged)",
+    "ClaimsofCandor:block-gabion-birch-*": "Gabion (Birch)",
+    "ClaimsofCandor:block-gabion-oak-*": "Gabion (Oak)",
+    "ClaimsofCandor:block-gabion-maple-*": "Gabion (Maple)",
+    "ClaimsofCandor:block-gabion-pine-*": "Gabion (Pine)",
+    "ClaimsofCandor:block-gabion-acacia-*": "Gabion (Acacia)",
+    "ClaimsofCandor:block-gabion-kapok-*": "Gabion (Kapok)",
+    "ClaimsofCandor:block-gabion-baldcypress-*": "Gabion (Bald cypress)",
+    "ClaimsofCandor:block-gabion-larch-*": "Gabion (Larch)",
+    "ClaimsofCandor:block-gabion-redwood-*": "Gabion (Redwood)",
+    "ClaimsofCandor:block-gabion-walnut-*": "Gabion (Walnut)",
+
+    "ClaimsofCandor:block-logisticpost-copper": "Logistic post (Copper spear)",
+    "ClaimsofCandor:block-logisticpost-tinbronze": "Logistic post (Tin bronze spear)",
+    "ClaimsofCandor:block-logisticpost-bismuthbronze": "Logistic post (Bismuth bronze spear)",
+    "ClaimsofCandor:block-logisticpost-blackbronze": "Logistic post (Black bronze spear)",
+    "ClaimsofCandor:block-logisticpost-gold": "Logistic post (Gold spear)",
+    "ClaimsofCandor:block-logisticpost-silver": "Logistic post (Silver spear)",
+    "ClaimsofCandor:block-logisticpost-iron": "Logistic post (Iron spear)",
+    "ClaimsofCandor:block-logisticpost-meteoriciron": "Logistic post (Meteoric iron spear)",
+    "ClaimsofCandor:block-logisticpost-steel": "Logistic post (Steel spear)",
+    "ClaimsofCandor:block-logisticpost-ruined": "Logistic post (Ruined spear)",
+
+    "game:ingameerror-stronghold-nobuildprivilege": "I cannot build here. This place is fortified",
+    "game:ingameerror-stronghold-nobreakprivilege-warning": "Damaging this area might be a declaration of war",
+    "game:ingameerror-stronghold-alreadyclaimed": "This area is already claimed",
+    "game:ingameerror-stronghold-undergroundflag": "This flag needs to be raised at the surface",
+
+    "game:ingameerror-logisticpoint-wrongbanner": "This logistic point banner isn't the same as the stronghold's. It won't supply It",
+
+    "game:blockhelp-flag-pullup": "Pull up the flag",
+    "game:blockhelp-flag-set": "Attach a banner",
+    "game:blockhelp-flag-pulldown": "Pull down the flag",
+    "game:blockhelp-flag-remove": "Detach the banner",
+
+    "game:blockhelp-barricade-build": "Build",
+
+    "gamemechanicinfo-stronghold-title": "ClaimsofCandor: Stronghold Guide",
+    "gamemechanicinfo-stronghold-text": "<strong>Stronghold Guide</strong><br><br><strong>Strongholds</strong><br>Strongholds center around a flag placed at the surface, within 10 blocks under the world-generated ground (by default). These areas restrict the placement of any blocks except siege equipment in a 64x64x64 area for <a href=\"handbook://block-ClaimsofCandor:flagpole-fort\">forts</a> and in a 96x96x96 area for <a href=\"handbook://block-ClaimsofCandor:flagpole-city\">cities</a> (by default). Members receive alerts about attacks, captures, or losses. A high quantity of food is required to keep strongholds active, with up to 4 containers allowed around the flag and equally around each logistic posts. The player who captures the flag gains ownership of the stronghold.<br><br><strong>Logistic Posts</strong><br>Logistic posts allow the binding of multiple food storages to a single flag, including cellars. They must have the same banner as the flag; capturing them stops the supply to the stronghold.<br><br><strong>Barricades</strong><br>Barricades can be set up in enemy strongholds. They need to be broken multiple times before disappearing and are unstable, not allowing for stacking.<br>"
+}
