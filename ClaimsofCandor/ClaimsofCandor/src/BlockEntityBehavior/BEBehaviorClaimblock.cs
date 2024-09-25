@@ -399,7 +399,7 @@ namespace ClaimsofCandor {
             //Api.Logger.Debug("CaptureUpdate: ", this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center);
             if (Api.Side != EnumAppSide.Server) return; // Serverside updates only.
             if (this.capturedBy == null) return;
-            Api.Logger.Debug("TryStartCapture Logistics| Ref:{0} CapBy:{1} CapByGrp:{2}", captureRef, capturedBy.PlayerName, capturedByGroup != null ? capturedByGroup : "NoCapGroup");
+            Api.Logger.Debug("CaptureUpdate| Ref:{0} CapBy:{1} CapByGrp:{2} Cap%{3}", captureRef, capturedBy.PlayerName, capturedByGroup != null ? capturedByGroup : "NoCapGroup", CapturedPercent);
             // Reset lastThresholdPassed if capture percentage drops
 
             this.previousCaptureDirection = this.captureDirection;
@@ -418,7 +418,6 @@ namespace ClaimsofCandor {
                     this.cellarExpectancy = GameMath.Max(this.cellarExpectancy, 0.2f);
                     this.Stronghold.Claim(capturedBy);
                     if (this.capturedByGroup.HasValue) this.Stronghold.ClaimGroup(capturedByGroup.Value);
-
                     this.EndCapture();
                     this.Blockentity.MarkDirty();
                 } else if (captureDirection == EnumCaptureDirection.Claim) 

@@ -115,9 +115,10 @@ namespace ClaimsofCandor
 
         public void ClaimGroup(int groupUID)
         {
-            if (Api is ICoreServerAPI Sapi && Name is string claimName)
+            if (Api is ICoreServerAPI Sapi)
             {
                 GroupName = Sapi.Groups.PlayerGroupsById[groupUID].Name;
+                string claimName = GetDisplayName();
                 Sapi.SendMessageToGroup(
                     groupUID,
                     Lang.Get("{0} now leagues with {1}", claimName, GroupName),
