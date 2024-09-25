@@ -304,7 +304,7 @@ namespace ClaimsofCandor {
 
                     if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().IsOwner(byPlayer, this.Stronghold))
                     {
-                        this.Stronghold.Unclaim();
+                        this.Stronghold.Unclaim(EnumUnclaimCause.Abandon);
                         this.Blockentity.MarkDirty();
                     }
                     else if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().IsMember(byPlayer, this.Stronghold))

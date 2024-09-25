@@ -118,7 +118,7 @@ namespace ClaimsofCandor
                     groupUID,
                     Lang.Get("{0} now leagues with {1}", claimName, GroupName),
                     EnumChatType.Notification
-                ); // ..
+                ); // ..              
             }
         } // void ..
 
