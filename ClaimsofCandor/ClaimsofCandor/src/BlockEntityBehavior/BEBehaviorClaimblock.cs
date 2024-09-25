@@ -358,7 +358,7 @@ namespace ClaimsofCandor {
             };
 
 
-            Api.Logger.Debug(" TryStartCapture Attempt {0} at {1}, current owner: {2}, ref {3}", byPlayer.PlayerName, byPlayer.Entity.Pos.XYZInt, this.Stronghold.PlayerName, captureRef != null); 
+            Api.Logger.Debug("TryStartCapture Attempt {0} at {1}, current owner: {2}, ref {3}", byPlayer.PlayerName, byPlayer.Entity.Pos.XYZInt, this.Stronghold.PlayerName, captureRef != null); 
             if (Api.Side == EnumAppSide.Server)
             {
                 this.Stronghold.contested = true;
@@ -375,7 +375,7 @@ namespace ClaimsofCandor {
 
                 if (this.captureRef == null) this.captureRef = Api.Event.RegisterGameTickListener(this.CaptureUpdate, 200);
 
-                Api.Logger.Debug("TryStartCapture Logistics: Ref: CapBy: CapByGrp:", captureRef, byPlayer.PlayerName, capGroup != null ? capGroup.GroupName : "NoCapGroup");
+                Api.Logger.Debug("TryStartCapture Logistics| Ref:{0} CapBy:{1} CapByGrp:{2}", captureRef, byPlayer.PlayerName, capGroup != null ? capGroup.GroupName : "NoCapGroup");
 
                 this.Blockentity.MarkDirty();
 
@@ -396,10 +396,10 @@ namespace ClaimsofCandor {
 
 
         private void CaptureUpdate(float deltaTime) {
-            Api.Logger.Debug("CaptureUpdate: ", this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center);
+            //Api.Logger.Debug("CaptureUpdate: ", this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center);
             if (Api.Side != EnumAppSide.Server) return; // Serverside updates only.
             if (this.capturedBy == null) return;
-
+            Api.Logger.Debug("TryStartCapture Logistics| Ref:{0} CapBy:{1} CapByGrp:{2}", captureRef, capturedBy.PlayerName, capturedByGroup != null ? capturedByGroup : "NoCapGroup");
             // Reset lastThresholdPassed if capture percentage drops
 
             this.previousCaptureDirection = this.captureDirection;
