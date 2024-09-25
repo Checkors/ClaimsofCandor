@@ -51,9 +51,13 @@ namespace ClaimsofCandor
         public bool IsClaimed => PlayerUID != null;
 
         //===============================
-        // RoC Initialization
+        // RoC Helper Functions
         //===============================
 
+        public string GetDisplayName()
+        {
+            return string.Format("{0}", Name != null ? Name : Center.ToLocalPosition(this.Api));
+        }
 
 
         //===============================

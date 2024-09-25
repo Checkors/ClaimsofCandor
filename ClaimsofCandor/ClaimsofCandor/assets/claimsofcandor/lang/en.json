@@ -47,6 +47,8 @@
     "ClaimsofCandor:stronghold-groupreclaim": "We have regained hold of {0}!",
     "ClaimsofCandor:stronghold-reclaim": "You we have regained hold of {0}!",
 
+    "ClaimsofCandor:stronghold-capture-defender-wins": "We've defended {0}!",
+    "ClaimsofCandor:stronghold-capture-attacker-lose": "We've failed to takeover {0}!",
     
     "ClaimsofCandor:stronghold-takeover-progress-attacker-taking": "We've our enemies remain in {0} of {1}!",
     "ClaimsofCandor:stronghold-takeover-progress-attacker-losing": "Our enemies have retaken {0} of {1}!",
