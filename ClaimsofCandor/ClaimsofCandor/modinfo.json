@@ -6,7 +6,7 @@
         "Cantos", "Lastelle"
     ],
     "description": "Claims of Candor, Based on the Bulwark mod by Lastelle",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "dependencies": {
         "game": ""
     }

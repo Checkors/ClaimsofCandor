@@ -293,14 +293,16 @@ namespace ClaimsofCandor {
         }
         } // void ..
 
-        public void OnInteractFilter(IPlayer byPlayer)
+        //===============================
+        // Block Interactions
+        //===============================
+        public void OnInteractFilter(IPlayer byPlayer, float secondsUsed)
         {
             if (byPlayer == null) return;
             Api.Logger.Debug("INPUT FILTER");
             if (Api.Side == EnumAppSide.Server)
             {
-                Api.Logger.Debug("INPUT FILTER SERVERSIDE");
-                if (byPlayer.Entity.ServerControls.Sneak){
+                if (byPlayer.Entity.ServerControls.Sneak && (secondsUsed>3f)){
 
                     if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().IsOwner(byPlayer, this.Stronghold))
                     {
@@ -313,14 +315,16 @@ namespace ClaimsofCandor {
                     }
                     return;
                 }
-                Api.Logger.Debug("TRY CAPTURE");
-                TryStartCapture(byPlayer, false);
+                else
+                {
+                    TryStartCapture(byPlayer);
+                }
                 return;
             }
 
         }
         
-        public void TryStartCapture(IPlayer byPlayer, bool usurp) {
+        public void TryStartCapture(IPlayer byPlayer, bool usurp=false) {
 
             if (byPlayer == null) return; //If there's no player, do nothing
 

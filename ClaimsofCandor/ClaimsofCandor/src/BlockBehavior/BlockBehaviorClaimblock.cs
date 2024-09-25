@@ -82,7 +82,7 @@ namespace ClaimsofCandor {
                 world.BlockAccessor
                     .GetBlockEntity(blockSel.Position)?
                     .GetBehavior<BlockEntityBehaviorClaimblock>()?
-                    .OnInteractFilter(byPlayer);
+                    .TryStartCapture(byPlayer);
 
                 return true;
 
@@ -96,7 +96,10 @@ namespace ClaimsofCandor {
                 BlockSelection blockSel,
                 ref EnumHandling handling
             ) {
-
+                world.BlockAccessor
+                        .GetBlockEntity(blockSel.Position)?
+                        .GetBehavior<BlockEntityBehaviorClaimblock>()?
+                        .OnInteractFilter(byPlayer, secondsUsed);
                 handling = EnumHandling.PreventSubsequent;
                 return true;
 
