@@ -43,7 +43,7 @@ namespace ClaimsofCandor {
             }; // ..
             
             private EnumCaptureDirection previousCaptureDirection;
-            private EnumCaptureProgress previousCaptureThreshhold;
+            private float lastCapturePercent;
 
             protected float   cellarExpectancy;
             protected double? NowClaimedUntilDay => this.Api.World.Calendar.TotalDays
@@ -52,18 +52,14 @@ namespace ClaimsofCandor {
 
 
             protected IPlayer               capturedBy;
-            protected int                   capturedByGroup; // Used for automatic Group Capture
+            protected int?                   capturedByGroup; // Used for automatic Group Capture
 
             protected EnumCaptureDirection captureDirection;
             protected float                captureDuration;
 
-
             // Capture message
-            private const float THRESHOLD_1 = 0.25f;
-            private const float THRESHOLD_2 = 0.50f;
-            private const float THRESHOLD_3 = 0.75f;
 
-            private float lastThresholdPassed = 0f;
+
 
             public BlockBehaviorClaimblock BlockBehavior { get; protected set; }
 
@@ -88,6 +84,7 @@ namespace ClaimsofCandor {
 
 
                 // Stronghold properties
+                this.Stronghold.Api = api;
                 int protectionRadius   = properties["protectionRadius"].AsInt(16);
                 captureRadius = properties["captureRadius"].AsInt(4);
                 this.captureDuration   = properties["captureDuration"].AsFloat(4f);
@@ -299,10 +296,10 @@ namespace ClaimsofCandor {
         public void OnInteractFilter(IPlayer byPlayer)
         {
             if (byPlayer == null) return;
-
+            Api.Logger.Debug("INPUT FILTER");
             if (Api.Side == EnumAppSide.Server)
             {
-
+                Api.Logger.Debug("INPUT FILTER SERVERSIDE");
                 if (byPlayer.Entity.ServerControls.Sneak){
 
                     if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().IsOwner(byPlayer, this.Stronghold))
@@ -316,7 +313,7 @@ namespace ClaimsofCandor {
                     }
                     return;
                 }
-
+                Api.Logger.Debug("TRY CAPTURE");
                 TryStartCapture(byPlayer, false);
                 return;
             }
@@ -333,7 +330,7 @@ namespace ClaimsofCandor {
                 if (serverPlayer != null) serverPlayer.SendIngameError("stronghold-undergroundflag");
                 return;
             }
-            if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().TryGetStronghold(this.Pos, out var _))
+            if (!this.Api.ModLoader.GetModSystem<FortificationModSystem>().TryGetStronghold(this.Pos, out var _))
             {
                 return;
             }
@@ -350,7 +347,7 @@ namespace ClaimsofCandor {
             };
 
 
-            //Api.Logger.Debug(" TryStartCapture Attempt {0} at {1}, current owner: {2}, ref {3}", byPlayer.PlayerName, byPlayer.Entity.Pos.XYZInt, this.Stronghold.PlayerName, captureRef != null); //Debug print
+            Api.Logger.Debug(" TryStartCapture Attempt {0} at {1}, current owner: {2}, ref {3}", byPlayer.PlayerName, byPlayer.Entity.Pos.XYZInt, this.Stronghold.PlayerName, captureRef != null); //Debug print
             if (this.captureRef == null && this.capturedBy == null) {
 
                 // If not currently being captured, start capturing
@@ -370,10 +367,10 @@ namespace ClaimsofCandor {
                     Api.Logger.Debug("CaptureRef: {0}", this.captureRef != null ? this.captureRef : "null");
                     this.Blockentity.MarkDirty();
 
-                    this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-groupstartcapture", byPlayer.PlayerUID, capGroup.GroupUid, this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center);
+                    this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-groupstartcapture", byPlayer.PlayerUID, capGroup.GroupUid, this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center.ToLocalPosition(this.Api));
                     if (this.Stronghold.IsClaimed)
                     {
-                        this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-grouplosingclaim", this.Stronghold.PlayerUID, this.Stronghold.GroupUID, this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center);
+                        this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-grouplosingclaim", this.Stronghold.PlayerUID, this.Stronghold.GroupUID, this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center.ToLocalPosition(this.Api));
                     }
                 }
 
@@ -386,38 +383,33 @@ namespace ClaimsofCandor {
 
 
         private void CaptureUpdate(float deltaTime) {
-            Api.Logger.Debug("CaptureUpdatePing");
+            Api.Logger.Debug("CaptureUpdate: ", this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center);
             if (Api.Side != EnumAppSide.Server) return; // Serverside updates only.
             if (this.capturedBy == null) return;
 
             // Reset lastThresholdPassed if capture percentage drops
-            if (this.CapturedPercent < lastThresholdPassed)
+
+            this.previousCaptureDirection = this.captureDirection;
+            this.captureDirection = CheckCaptureArea(out _, out _);
+
+            if (this.captureDirection != this.previousCaptureDirection && CapturedPercent != 1f)
             {
-                lastThresholdPassed = 0f;
+                CaptureUpdateMessage(EnumCaptureProgress.CaptureReverse);
             }
 
             if (this.CapturedPercent == 1f)
             {
                 if (!this.Stronghold.IsClaimed)
-
-                    if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().TryRegisterStronghold(this.Stronghold))
-                    {
-
-                        this.cellarExpectancy = GameMath.Max(this.cellarExpectancy, 0.2f);
-                        this.Stronghold.Claim(capturedBy);
-                        if (this.capturedByGroup != -1) this.Stronghold.ClaimGroup(capturedByGroup);
-                        this.Stronghold.contested = false;
-                        this.EndCapture();
-                        this.Blockentity.MarkDirty();
-
-                    }
-                    else if (this.capturedBy is IServerPlayer serverPlayer)
-                    {
-                        this.Stronghold.contested = false;
-                        this.EndCapture();
-                        this.Blockentity.MarkDirty();
-                        //serverPlayer.SendIngameError("stronghold-alreadyclaimed");
-                    }
+                {
+                    this.previousCaptureDirection = EnumCaptureDirection.Still;
+                    this.cellarExpectancy = GameMath.Max(this.cellarExpectancy, 0.2f);
+                    this.Stronghold.Claim(capturedBy);
+                    if (this.capturedByGroup.HasValue) this.Stronghold.ClaimGroup(capturedByGroup.Value);
+                    this.Stronghold.contested = false;
+                    this.EndCapture();
+                    this.Blockentity.MarkDirty();
+                }
+                    
             }
                 
 
@@ -442,7 +434,7 @@ namespace ClaimsofCandor {
                             //Api.Logger.Debug("C, DEF: {0}", playersAround[i].PlayerName);
                             defenders.Add(playersAround[i]);
                         }
-                        else if (playersAround[i] == this.capturedBy || (playersAround[i].GetGroup(this.capturedByGroup) != null))
+                        else if (playersAround[i] == this.capturedBy || (playersAround[i].GetGroup(this.capturedByGroup.HasValue ? this.capturedByGroup.Value : -1) != null))
                         {
                             //Api.Logger.Debug("C, ATK: {0}", playersAround[i].PlayerName);
                             attackers.Add(playersAround[i]);
@@ -450,7 +442,7 @@ namespace ClaimsofCandor {
                     } // Claimed Capture
                     else
                     {
-                        if (playersAround[i] == this.capturedBy || (playersAround[i].GetGroup(this.capturedByGroup) != null))
+                        if (playersAround[i] == this.capturedBy || (playersAround[i].GetGroup(this.capturedByGroup.HasValue ? this.capturedByGroup.Value : -1) != null))
                         {
                             //Api.Logger.Debug("U DEF: {0}", playersAround[i].PlayerName);
                             defenders.Add(playersAround[i]);
@@ -471,6 +463,82 @@ namespace ClaimsofCandor {
 
         }
 
+        private void CaptureUpdateMessage(EnumCaptureProgress capEvent)
+        {
+            string defenderMessage = null;
+            string capperMessage = null;
+            string strongholdName = string.Format("{0}", Stronghold.Name != null ? Stronghold.Name : Stronghold.Center.ToLocalPosition(this.Api));
+            string defender = null;
+            string capper = capturedBy.PlayerName;
+            if (capturedByGroup.HasValue) capper = string.Format("{0}", capturedBy.GetGroup(capturedByGroup.Value) != null ? capturedBy.GetGroup(capturedByGroup.Value).GroupName : capturedBy.PlayerName);
+            switch (capEvent)
+            {
+                case EnumCaptureProgress.CaptureReverse:
+                    {
+                        if (Stronghold.IsClaimed)
+                        {
+                            defender = string.Format("{0}", Stronghold.GroupName ?? Stronghold.PlayerName);
+                            defenderMessage = "ClaimsofCandor:stronghold-takeover-switch";
+                            capperMessage = "ClaimsofCandor:stronghold-takeover-switch";
+
+
+                            if (captureDirection == EnumCaptureDirection.Still)
+                            {
+                                defenderMessage = "ClaimsofCandor:stronghold-takeover-switch-stalemate";
+                                capperMessage = "ClaimsofCandor:stronghold-takeover-switch-stalemate";
+
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(capperMessage, capturedBy.PlayerUID, capturedByGroup, strongholdName);
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(defenderMessage, Stronghold.PlayerUID, Stronghold.GroupUID, strongholdName);
+                                return;
+                            }
+                            else if (captureDirection == EnumCaptureDirection.Claim)
+                            {
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(capperMessage, capturedBy.PlayerUID, capturedByGroup, defender, strongholdName);
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(defenderMessage, Stronghold.PlayerUID, Stronghold.GroupUID, defender, strongholdName);
+                                return;
+                            }
+                            else if (captureDirection == EnumCaptureDirection.Unclaim)
+                            {
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(capperMessage, capturedBy.PlayerUID, capturedByGroup, capper, strongholdName);
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(defenderMessage, Stronghold.PlayerUID, Stronghold.GroupUID, capper, strongholdName);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if (captureDirection == EnumCaptureDirection.Still)
+                            {
+                                capperMessage = "ClaimsofCandor:stronghold-capture-switch-stalemate";
+
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(capperMessage, capturedBy.PlayerUID, capturedByGroup, strongholdName);
+                                return;
+                            }
+                            else if (captureDirection == EnumCaptureDirection.Claim)
+                            {
+                                capperMessage = "ClaimsofCandor:stronghold-capture-switch-taking";
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(capperMessage, capturedBy.PlayerUID, capturedByGroup, strongholdName);
+                                return;
+                            }
+                            else if (captureDirection == EnumCaptureDirection.Unclaim)
+                            {
+                                capperMessage = "ClaimsofCandor:stronghold-capture-switch-losing";
+                                Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage(capperMessage, capturedBy.PlayerUID, capturedByGroup, strongholdName);
+                                return;
+                            }
+
+
+
+                        }
+
+
+
+                        break;
+                    }
+                case EnumCaptureProgress.CaptureQ2:{
+                        break;
+                    }
+            }
+        }
 
         public void EndCapture() {
             if (Api.Side == EnumAppSide.Server)

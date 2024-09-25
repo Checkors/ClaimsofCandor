@@ -111,7 +111,7 @@ namespace ClaimsofCandor
             Stronghold area; 
             if (HasPrivilege(args.Caller.Player, args.Caller.Player.Entity.Pos.AsBlockPos, out area))
             {
-                if (area == null) return TextCommandResult.Error(Lang.GetL(args.LanguageCode, "You're not in a stronghold you claimed"));
+                if (area == null) return TextCommandResult.Error(Lang.GetL(args.LanguageCode, "ClaimsofCandor:stronghold-name-failure"));
                 if (IsOwner(args.Caller.Player, area))
                 {
                     area.Name = args[0].ToString();
@@ -120,7 +120,7 @@ namespace ClaimsofCandor
                 }
                 else return TextCommandResult.Error(Lang.GetL(args.LanguageCode, "ClaimsofCandor:stronghold-name-failure"));
             }
-            else return TextCommandResult.Error(Lang.GetL(args.LanguageCode, "You're not in a stronghold you claimed"));
+            else return TextCommandResult.Error(Lang.GetL(args.LanguageCode, "ClaimsofCandor:stronghold-name-failure"));
             
 
         }
@@ -387,6 +387,15 @@ namespace ClaimsofCandor
                 stronghold.UpdateRef = stronghold.Api
                     .Event
                     .RegisterGameTickListener(stronghold.Update, 2000, 1000);
+
+                this.StrongholdAdded?.Invoke(stronghold);
+                api.Logger.Debug("STRONGHOLD REGISTER SUCCESS");
+            }
+            else
+            {
+                api.Logger.Debug("STRONGHOLD REGISTER FAILURE");
+                return false;
+
             }
 
             return true;
@@ -474,7 +483,7 @@ namespace ClaimsofCandor
                     {
                         sb.Append(string.Format("stronghold: {0} ", claim.Name != null ? claim.Name : claim.Center.AsVec3i));
                     }
-                    //api.Logger.Debug("CHECKING YOUR PRIVILEGE: {0}", sb.ToString());
+                    api.Logger.Debug("CHECKING YOUR PRIVILEGE: {0}", sb.ToString());
 
 
                     if (claims == null) return true; // No claim found, access
@@ -485,30 +494,30 @@ namespace ClaimsofCandor
                     {
 
                         privilege = false;
-                        //api.Logger.Debug("PRIV: CONTESTED: {0}", privilege);
+                        api.Logger.Debug("PRIV: CONTESTED: {0}", privilege);
                         goto Privilige;
                     } // Contested, no access
                     if (area.PlayerUID == null)
                     {
                         privilege = true;
-                        //api.Logger.Debug("PRIV: NO OWNER: {0}", privilege);
+                        api.Logger.Debug("PRIV: NO OWNER: {0}", privilege);
                         goto Privilige;
                     } // Fortress not claimed, access
                     if (IsOwner(byPlayer, area))
                     {
                         privilege = true;
-                        //api.Logger.Debug("PRIV: IS OWNER: {0}", privilege);
+                        api.Logger.Debug("PRIV: IS OWNER: {0}", privilege);
                         goto Privilige;
                     } // Player is current owner, access
                     if (area.GroupUID.HasValue)
                     {
                         privilege = byPlayer.GetGroup(area.GroupUID.Value) != null;
-                        //api.Logger.Debug("PRIV: IN GROUP: {0}", privilege);
+                        api.Logger.Debug("PRIV: IN GROUP: {0}", privilege);
                         goto Privilige;
                     }// Returns true if player is in the group, false otherwise, skips if there is no group.
 
                     privilege = false; // End case, owned stronghold with no group, byplayer does not own the stronghold.
-                    //api.Logger.Debug("PRIV: NO ACCESS: {0}", privilege);
+                    api.Logger.Debug("PRIV: NO ACCESS: {0}", privilege);
 
 
                 }

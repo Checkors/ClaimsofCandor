@@ -99,7 +99,7 @@ namespace ClaimsofCandor
                 }, Name); // ..
 
                 if (GroupUID is int groupUID) Sapi.SendMessageToGroup(groupUID, message, EnumChatType.Notification);
-                else Sapi.SendMessage(Sapi.World.PlayerByUid(PlayerUID), GlobalConstants.GeneralChatGroup, message, EnumChatType.Notification);
+                else Sapi.SendMessage(Sapi.World.PlayerByUid(PlayerUID), GlobalConstants.InfoLogChatGroup, message, EnumChatType.Notification);
             } // if ..
 
             PlayerUID = null;
@@ -170,14 +170,14 @@ namespace ClaimsofCandor
                     string message = Lang.Get((Name is not null ? "{0}" : "One of your claim") + " is under attack!", Name);
 
                     if (GroupUID is int groupUID) Sapi.SendMessageToGroup(groupUID, message, EnumChatType.Notification);
-                    else Sapi.SendMessage(Sapi.World.PlayerByUid(PlayerUID), GlobalConstants.GeneralChatGroup, message, EnumChatType.Notification);
+                    else Sapi.SendMessage(Sapi.World.PlayerByUid(PlayerUID), GlobalConstants.InfoLogChatGroup, message, EnumChatType.Notification);
 
                 }
                 else if (newIntensity >= 2f && Name is string name)
                 {
 
-                    if (newBesiegingCount >= 2 && BesiegingEntities.Count < 2) Sapi.SendMessageToGroup(GlobalConstants.GeneralChatGroup, Lang.Get("{0} is currently being besieged by a small band", name), EnumChatType.Notification);
-                    else if (newBesiegingCount >= 4 && BesiegingEntities.Count < 4) Sapi.SendMessageToGroup(GlobalConstants.GeneralChatGroup, Lang.Get("{0} is currently being besieged by a medium sized army", name), EnumChatType.Notification);
+                    if (newBesiegingCount >= 2 && BesiegingEntities.Count < 2) Sapi.SendMessageToGroup(GlobalConstants.InfoLogChatGroup, Lang.Get("{0} is currently being besieged by a small band", name), EnumChatType.Notification);
+                    else if (newBesiegingCount >= 4 && BesiegingEntities.Count < 4) Sapi.SendMessageToGroup(GlobalConstants.InfoLogChatGroup, Lang.Get("{0} is currently being besieged by a medium sized army", name), EnumChatType.Notification);
 
                 } // if ..
 

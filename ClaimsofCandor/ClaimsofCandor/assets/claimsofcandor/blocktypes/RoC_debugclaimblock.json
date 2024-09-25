@@ -1,5 +1,5 @@
 {
-    "code": "claimblock",
+    "code": "debugclaimblock",
     "variantgroups": [
         {
             "code": "type",
@@ -63,14 +63,17 @@
     },
     "lightAbsorption": 0,
     "lightHsv": [ 7, 3, 18 ],
-    "shape": {
-        "base": "claimsofcandor:shapes/block/claimblock"
+    "drawtype": "Cube",
+    "texture": {
+        "base": "block/rocblock"
     },
+    "blockmaterial": "Metal",
     "resistance": 3.5,
     "sounds": {
         "place": "game:block/anvil",
         "walk": "game:walk/stone"
     }
+
 
 
 }

@@ -53,7 +53,12 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <Compile Remove="assets\claimsofcandor\NewFolder\**" />
+  <Content Remove="assets\claimsofcandor\NewFolder\**" />
+  <EmbeddedResource Remove="assets\claimsofcandor\NewFolder\**" />
+  <None Remove="assets\claimsofcandor\NewFolder\**" />
   <None Remove="assets\claimsofcandor\blocktypes\RoC_claimblock.json" />
+  <None Remove="assets\claimsofcandor\blocktypes\RoC_debugclaimblock.json" />
   <None Remove="assets\claimsofcandor\itemtypes\debug\claimTester.json" />
   <None Remove="assets\claimsofcandor\lang\fr.json" />
   <None Remove="assets\claimsofcandor\shapes\block\pannel.png" />
@@ -65,7 +70,14 @@
 </ItemGroup>
 
 <ItemGroup>
+  <Folder Include="assets\claimsofcandor\recipes\" />
   <Folder Include="assets\game\config\handbook\" />
+</ItemGroup>
+
+<ItemGroup>
+  <Content Update="assets\claimsofcandor\blocktypes\RoC_debugclaimblock.json">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
 </ItemGroup>
 
 </Project>
