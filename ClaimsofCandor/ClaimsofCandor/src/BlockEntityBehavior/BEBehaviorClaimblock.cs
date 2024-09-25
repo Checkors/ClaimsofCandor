@@ -362,19 +362,23 @@ namespace ClaimsofCandor {
                     this.capturedBy = byPlayer;
 
                     PlayerGroupMembership capGroup = this.Api.ModLoader.GetModSystem<FortificationModSystem>().GetPlayerCaptureGroup(byPlayer);
-                    if (capGroup != null)
-                    {
-                        this.capturedByGroup = capGroup.GroupUid;
-                        Api.Logger.Debug("Capturegroup", this.captureRef != null ? this.captureRef : "null");
-                    }
+
                     this.captureRef = Api.Event.RegisterGameTickListener(this.CaptureUpdate, 200);
                     Api.Logger.Debug("CaptureRef: {0}", this.captureRef != null ? this.captureRef : "null");
                     this.Blockentity.MarkDirty();
 
-                    this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-groupstartcapture", byPlayer.PlayerUID, capGroup.GroupUid, this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center.ToLocalPosition(this.Api));
+                    string strongholdName = string.Format("{0}", this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center.ToLocalPosition(this.Api));
+
+                    if (capGroup != null)
+                    {
+                        this.capturedByGroup = capGroup.GroupUid;
+                        Api.Logger.Debug("Capturegroup", this.captureRef != null ? this.captureRef : "null");
+                        this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-groupstartcapture", byPlayer.PlayerUID, capGroup.GroupUid, strongholdName);
+                    } else this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-groupstartcapture", byPlayer.PlayerUID, null, strongholdName);
+
                     if (this.Stronghold.IsClaimed)
                     {
-                        this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-grouplosingclaim", this.Stronghold.PlayerUID, this.Stronghold.GroupUID, this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center.ToLocalPosition(this.Api));
+                        this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-grouplosingclaim", this.Stronghold.PlayerUID, this.Stronghold.GroupUID, strongholdName);
                     }
                 }
 
