@@ -27,6 +27,11 @@
     "Ruins of {0}": "Ruins of {0}",
 
     "ClaimsofCandor:stronghold-noaccess": "You can't do that here!",
+    "ClaimsofCandor:stronghold-cannot": "You can't do that here!",
+    "ClaimsofCandor:stronghold-blockInStronghold": "This claimblock is in another stronghold!",
+    "ClaimsofCandor:stronghold-capture-usurp": "Our claim on {0} is being usurped by {1}!",
+    "ClaimsofCandor:stronghold-holdtoUsurp": "You have to usurp this claim to capture it!",
+
 
     "ClaimsofCandor:stronghold-name-success": "This stronghold is now dubbed {0}",
     "ClaimsofCandor:stronghold-name-fail": "You can't name this stronghold",

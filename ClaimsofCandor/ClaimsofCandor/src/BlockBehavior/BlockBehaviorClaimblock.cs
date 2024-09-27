@@ -82,7 +82,7 @@ namespace ClaimsofCandor {
                 world.BlockAccessor
                     .GetBlockEntity(blockSel.Position)?
                     .GetBehavior<BlockEntityBehaviorClaimblock>()?
-                    .OnInteractFilter(byPlayer);
+                    .TryStartCapture(byPlayer, false);
 
                 return true;
 

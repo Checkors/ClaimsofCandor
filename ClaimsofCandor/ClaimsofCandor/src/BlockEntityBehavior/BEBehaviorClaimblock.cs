@@ -271,7 +271,7 @@ namespace ClaimsofCandor {
         private void Update(float deltaTime) {
         if (Api.Side == EnumAppSide.Server)
         {
-                Api.Logger.Debug("Update Tick, Captureby: {0}, group: {1}, current owner: {2}, PercCap: {3}, PrevPercCap: {4}", capturedBy != null ? capturedBy.PlayerName : "none", this.capturedByGroup, this.Stronghold.PlayerName ?? "none", CapturedPercent, previousCapturePercent);
+                //Api.Logger.Debug("Update Tick, Captureby: {0}, group: {1}, current owner: {2}, PercCap: {3}, PrevPercCap: {4}", capturedBy != null ? capturedBy.PlayerName : "none", this.capturedByGroup, this.Stronghold.PlayerName ?? "none", CapturedPercent, previousCapturePercent);
                 //Api.Logger.Debug(" \"void Update\" function call");
                 this.previousCapturePercent = this.CapturedPercent;
                 this.CapturedPercent += GameMath.Clamp(this.TargetPercent - this.CapturedPercent, -deltaTime / this.captureDuration, deltaTime / this.captureDuration);
@@ -306,30 +306,25 @@ namespace ClaimsofCandor {
             if (byPlayer == null) return;
             if (Api.Side == EnumAppSide.Server)
             {
-                if (secondsUsed > 0)
-                {
-                    if (byPlayer.Entity.ServerControls.Sneak)
-                    {
-                        if (secondsUsed > 3f)
-                        {
 
-                            if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().IsOwner(byPlayer, this.Stronghold))
-                            {
-                                this.Stronghold.Unclaim(EnumUnclaimCause.Abandon);
-                                this.Blockentity.MarkDirty();
-                            }
-                            else if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().IsMember(byPlayer, this.Stronghold))
-                            {
-                                TryStartCapture(byPlayer, true);
-                            }
-                            return;
-                        }
-                    }
-                }
-                else
+                if (byPlayer.Entity.ServerControls.Sneak)
                 {
-                    TryStartCapture(byPlayer, true);
-                }
+                    if (secondsUsed > 3f)
+                    {
+
+                        if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().IsOwner(byPlayer, this.Stronghold))
+                        {
+                            this.Stronghold.Unclaim(EnumUnclaimCause.Abandon);
+                            this.Blockentity.MarkDirty();
+                        }
+                        else if (this.Api.ModLoader.GetModSystem<FortificationModSystem>().IsMember(byPlayer, this.Stronghold))
+                        {
+                            TryStartCapture(byPlayer, true);
+                        }
+                        return;
+                    }
+                } 
+
                 return;
             }
 
@@ -363,15 +358,22 @@ namespace ClaimsofCandor {
                 }// 0-> And if the player has the same group as the stronghold group, do nothing.
                 // *IMPLEMENT* Stronghold transfering via command.
             };
-
+            if (this.capturedBy == byPlayer) return;
 
             Api.Logger.Debug("TryStartCapture Attempt {0} at {1}, current owner: {2}, ref {3}", byPlayer.PlayerName, byPlayer.Entity.Pos.XYZInt, this.Stronghold.PlayerName, captureRef != null); 
             if (Api.Side == EnumAppSide.Server)
             {
+                string strongholdName = Stronghold.GetDisplayName();
                 this.Stronghold.contested = true;
-                this.capturedBy = byPlayer;
+
 
                 PlayerGroupMembership capGroup = this.Api.ModLoader.GetModSystem<FortificationModSystem>().GetPlayerCaptureGroup(byPlayer);
+
+                if (capturedBy != null)
+                {
+                    this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-capture-usurp", capturedBy.PlayerUID, capturedByGroup, strongholdName, capGroup != null ? capGroup.GroupName : byPlayer.PlayerName);
+                }
+                this.capturedBy = byPlayer;
 
                 if (capGroup != null)
                 {
@@ -380,14 +382,14 @@ namespace ClaimsofCandor {
 
                 }
 
-                if (this.captureRef == null) this.captureRef = Api.Event.RegisterGameTickListener(this.CaptureUpdate, 45);
+                if (this.captureRef == null) this.captureRef = Api.Event.RegisterGameTickListener(this.CaptureUpdate, 49);
 
                 Api.Logger.Debug("TryStartCapture Logistics| Ref:{0} CapBy:{1} CapByGrp:{2}", captureRef, byPlayer.PlayerName, capGroup != null ? capGroup.GroupName : "NoCapGroup");
 
                 this.Blockentity.MarkDirty();
 
                 // Player Information
-                string strongholdName = Stronghold.GetDisplayName();
+
                 if (capGroup != null) this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-groupstartcapture", byPlayer.PlayerUID, capGroup.GroupUid, strongholdName);
                 else this.Api.ModLoader.GetModSystem<FortificationModSystem>().SendStrongholdMessage("ClaimsofCandor:stronghold-groupstartcapture", byPlayer.PlayerUID, null, strongholdName);
                 if (this.Stronghold.IsClaimed)
@@ -402,10 +404,10 @@ namespace ClaimsofCandor {
 
 
         private void CaptureUpdate(float deltaTime) {
-            //Api.Logger.Debug("CaptureUpdate: ", this.Stronghold.Name != null ? this.Stronghold.Name : this.Stronghold.Center);
+            //Api.Logger.Debug("CaptureUpdate: {0}", this.Stronghold.GetDisplayName());
             if (Api.Side != EnumAppSide.Server) return; // Serverside updates only.
             if (this.capturedBy == null) return;
-            Api.Logger.Debug("CaptureUpdate| Ref:{0} CapBy:{1} CapByGrp:{2} Cap%{3}", captureRef, capturedBy.PlayerName, capturedByGroup != null ? capturedByGroup : "NoCapGroup", CapturedPercent);
+            Api.Logger.Debug("CaptureUpdate| Ref:{0} CapBy:{1} CapByGrp:{2} Cap%:{3}, preCap%:{4}", captureRef, capturedBy.PlayerName, capturedByGroup != null ? capturedByGroup : "NoCapGroup", CapturedPercent, previousCapturePercent);
             // Reset lastThresholdPassed if capture percentage drops
 
             this.previousCaptureDirection = this.captureDirection;
@@ -617,7 +619,7 @@ namespace ClaimsofCandor {
                 this.captureDirection = EnumCaptureDirection.Still;
                 this.captureRef = null;
                 this.capturedBy = null;
-                this.capturedByGroup = -1;
+                this.capturedByGroup = null;
                 this.Blockentity.MarkDirty();
             }
         } // void ..

@@ -136,12 +136,14 @@ namespace ClaimsofCandor
             GroupUID = group.Uid;
             GroupName = group.Name;
 
-            if (Api is ICoreServerAPI Sapi && Name is string claimName)
+            if (Api is ICoreServerAPI Sapi && Name is string claimName) {
                 Sapi.SendMessageToGroup(
                     group.Uid,
                     Lang.Get("{0} now leagues with {1}", claimName, group.Name),
                     EnumChatType.Notification
                 ); // ..
+                Sapi.World.BlockAccessor.GetBlockEntity(Center).MarkDirty();
+            }
         } // void ..
 
 
