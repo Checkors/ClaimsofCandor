@@ -49,16 +49,17 @@
 
     "ClaimsofCandor:stronghold-capture-defender-wins": "We've defended {0}!",
     "ClaimsofCandor:stronghold-capture-attacker-lose": "We've failed to takeover {0}!",
-    
-    "ClaimsofCandor:stronghold-takeover-progress-attacker-taking": "We've our enemies remain in {0} of {1}!",
-    "ClaimsofCandor:stronghold-takeover-progress-attacker-losing": "Our enemies have retaken {0} of {1}!",
+
+    "ClaimsofCandor:stronghold-takeover-progress-attacker-taking": "We've taken {0} of {1}!",
     "ClaimsofCandor:stronghold-takeover-progress-defender-losing": "We've been pushed out of {0} of {1}!",
+
+    "ClaimsofCandor:stronghold-takeover-progress-attacker-losing": "Our enemies have retaken {0} of {1}!",
     "ClaimsofCandor:stronghold-takeover-progress-defender-taking": "We've regained {0} of {1}!",
 
-    "ClaimsofCandor:stronghold-capture-progress-attacker-taking": "We've removed our enemies from {0} of {1}!",
-    "ClaimsofCandor:stronghold-capture-progress-attacker-losing": "Our enemies have retaken {0} of {1}!",
-    "ClaimsofCandor:stronghold-capture-progress-defender-losing": "We've been pushed out of {0} of {1}!",
+    "ClaimsofCandor:stronghold-capture-progress-defender-losing": "We're losing control over {0} of {1}!",
+
     "ClaimsofCandor:stronghold-capture-progress-defender-taking": "We've taken hold of {0} of {1}!",
+
 
     "ClaimsofCandor:capturegroup-notingroup": "You're not in the Group {0} and it cannot be your capture group!",
     "ClaimsofCandor:capturegroup-nosuchgroup": "That group doesn't exist!",

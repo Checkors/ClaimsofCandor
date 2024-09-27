@@ -3,10 +3,10 @@
     "modid": "claimsofcandor",
     "name": "ClaimsofCandor",
     "authors": [
-        "Cantos", "Lastelle"
+        "Cantos", "Lastelle", "JanZizka",
     ],
     "description": "Claims of Candor, Based on the Bulwark mod by Lastelle",
-    "version": "0.0.10",
+    "version": "0.0.12",
     "dependencies": {
         "game": ""
     }

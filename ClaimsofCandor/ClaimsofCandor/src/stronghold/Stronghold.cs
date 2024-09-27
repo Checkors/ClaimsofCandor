@@ -72,6 +72,7 @@ namespace ClaimsofCandor
 
             if (Api is ICoreServerAPI Sapi)
             {
+
                 Sapi.SendMessage(
                     byPlayer,
                     GlobalConstants.InfoLogChatGroup,
@@ -117,6 +118,7 @@ namespace ClaimsofCandor
         {
             if (Api is ICoreServerAPI Sapi)
             {
+
                 GroupName = Sapi.Groups.PlayerGroupsById[groupUID].Name;
                 string claimName = GetDisplayName();
                 Sapi.SendMessageToGroup(
@@ -124,6 +126,7 @@ namespace ClaimsofCandor
                     Lang.Get("{0} now leagues with {1}", claimName, GroupName),
                     EnumChatType.Notification
                 ); // ..              
+                Sapi.World.BlockAccessor.GetBlockEntity(Center).MarkDirty();
             }
         } // void ..
 

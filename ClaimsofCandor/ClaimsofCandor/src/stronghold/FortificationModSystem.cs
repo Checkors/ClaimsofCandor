@@ -48,6 +48,7 @@ namespace ClaimsofCandor
         {
             base.Start(api);
             this.api = api;
+
         } // void ..
 
 
@@ -79,24 +80,38 @@ namespace ClaimsofCandor
                 .EndSubCommand()
                 .BeginSubCommand("stopleague")
                     .WithDescription("Stops the affiliation with a group")
-                    .WithArgs(sapi.ChatCommands.Parsers.Word("group name"))
+                    .WithArgs(sapi.ChatCommands.Parsers.Word("GroupName"))
                     .HandleWith(new OnCommandDelegate(Cmd_StrongholdUnleague))
                 .EndSubCommand()
             // RoC Bulwark command registrations
                 .BeginSubCommand("capturegroup")
+                    .WithDescription("The group that will automatically league with a stronghold you capture")
                     .RequiresPlayer()
                     .RequiresPrivilege(Privilege.chat)
                     .BeginSubCommand("set")
-                        .WithArgs(sapi.ChatCommands.Parsers.Word("groupname"))
+                        .WithDescription("Sets the group that will automatically league with strongholds you capture")
+                        .WithArgs(sapi.ChatCommands.Parsers.Word("GroupName"))
                         .HandleWith(new OnCommandDelegate(Cmd_SetCaptureGroup))
                     .EndSubCommand()
                     .BeginSubCommand("show")
+                        .WithDescription("Gets your current capturegroup")
                         .IgnoreAdditionalArgs()
                         .HandleWith(new OnCommandDelegate(Cmd_GetCaptureGroup));
 
         }
 
+        public override void StartClientSide(ICoreClientAPI api)
+        {
+            base.StartClientSide(api);
 
+            api.ChatCommands
+                .Create("boundaries")
+                .RequiresPrivilege(Privilege.chat)
+                .WithDescription("Toggles rendering for claim boundaries")
+                .WithArgs(api.ChatCommands.Parsers.Bool("enabled"))
+                .IgnoreAdditionalArgs()
+                .HandleWith(new OnCommandDelegate(Cmd_ShowClaimAreas));
+        }
 
 
         //===============================
@@ -137,7 +152,7 @@ namespace ClaimsofCandor
                 if ((api as ICoreServerAPI).Groups.GetPlayerGroupByName(args[0].ToString()) is PlayerGroup playerGroup)
                 {
                     leagueArea.ClaimGroup(playerGroup);
-                    api.World.BlockAccessor.GetBlockEntity(leagueArea.Center).MarkDirty();
+                    
 
                 }
                 else TextCommandResult.Error(Lang.GetL(args.LanguageCode, "No such group found"));
@@ -250,8 +265,7 @@ namespace ClaimsofCandor
 
             if (blockSel != null)
             {
-                string blockname = api.World.BlockAccessor.GetBlock(blockSel.Position).GetPlacedBlockName(api.World, blockSel.Position);
-
+                //string blockname = api.World.BlockAccessor.GetBlock(blockSel.Position).GetPlacedBlockName(api.World, blockSel.Position);
                 //api.Logger.Debug("[ClaimsofCandor_BCA] {0} attempted place/remove {1}, at position {2}", byPlayer.PlayerName.ToString(), blockname, blockSel.Position.ToString());
 
                 if (!(HasPrivilege(byPlayer, blockSel, out _) || byPlayer.WorldData.CurrentGameMode == EnumGameMode.Creative))
@@ -478,13 +492,13 @@ namespace ClaimsofCandor
                 if (TryGetStronghold(blockSel.Position, out claims))
                 {
 
-                    StringBuilder sb = new StringBuilder();
+                    /*StringBuilder sb = new StringBuilder();
                     foreach (Stronghold claim in claims)
                     {
                         sb.Append(string.Format("stronghold: {0} ", claim.Name != null ? claim.Name : claim.Center.AsVec3i));
                     }
                     api.Logger.Debug("CHECKING YOUR PRIVILEGE: {0}", sb.ToString());
-
+                    */
 
                     if (claims == null) return true; // No claim found, access
                     area = claims.Aggregate((currentMin, claim) =>
@@ -555,13 +569,13 @@ namespace ClaimsofCandor
                 if (TryGetStronghold(pos, out claims))
                 {
 
-                    StringBuilder sb = new StringBuilder();
+                    /*StringBuilder sb = new StringBuilder();
                     foreach (Stronghold claim in claims)
                     {
                         sb.Append(string.Format("stronghold: {0} ", claim.Name != null ? claim.Name : claim.Center.AsVec3i));
                     }
                     //api.Logger.Debug("CHECKING YOUR PRIVILEGE: {0}", sb.ToString());
-
+                    */
 
                     if (claims == null) return true; // No claim found, access
                     area = claims.Aggregate((currentMin, claim) =>
@@ -569,7 +583,6 @@ namespace ClaimsofCandor
 
                     if (area.contested)
                     {
-
                         privilege = false;
                         //api.Logger.Debug("PRIV: CONTESTED: {0}", privilege);
                         goto Privilige;

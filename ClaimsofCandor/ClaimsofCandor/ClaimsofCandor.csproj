@@ -57,6 +57,7 @@
   <Content Remove="assets\claimsofcandor\NewFolder\**" />
   <EmbeddedResource Remove="assets\claimsofcandor\NewFolder\**" />
   <None Remove="assets\claimsofcandor\NewFolder\**" />
+  <Compile Remove="src\stronghold\rendering\ClaimRenderer.cs" />
   <None Remove="assets\claimsofcandor\blocktypes\RoC_claimblock.json" />
   <None Remove="assets\claimsofcandor\blocktypes\RoC_debugclaimblock.json" />
   <None Remove="assets\claimsofcandor\itemtypes\debug\claimTester.json" />
@@ -72,6 +73,10 @@
 <ItemGroup>
   <Folder Include="assets\claimsofcandor\recipes\" />
   <Folder Include="assets\game\config\handbook\" />
+</ItemGroup>
+
+<ItemGroup>
+  <None Include="src\stronghold\rendering\ClaimRenderer.cs" />
 </ItemGroup>
 
 <ItemGroup>
